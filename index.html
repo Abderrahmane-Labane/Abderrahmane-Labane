@@ -276,17 +276,62 @@
     }
     .cv-download:hover { background: var(--ink); color: var(--bg); }
 
-    /* BLOG */
+    /* NOTES */
     #blog { background: var(--ink); color: #F7F6F2; }
     #blog h2 { color: #F7F6F2; }
     #blog .section-number { color: #335577; }
-    .blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: #012244; }
-    .blog-card { background: #01294F; padding: 2.5rem; text-decoration: none; color: #BDD0E0; display: block; transition: background 0.2s; }
-    .blog-card:hover { background: #013060; }
-    .blog-date { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-    .blog-title { font-size: 1.2rem; font-weight: 600; color: #EEF4FA; margin-bottom: 0.75rem; font-style: italic; }
-    .blog-excerpt { font-size: 0.92rem; color: #7AADCC; font-weight: 300; line-height: 1.7; }
-    .blog-read-more { display: inline-block; margin-top: 1.5rem; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+
+    .notes-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: #012244;
+    }
+
+    .note-card {
+      background: #01294F;
+      border: 1px solid #1a4a70;
+      text-decoration: none;
+      color: #BDD0E0;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .note-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+    .note-img {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      background: #012244;
+      flex-shrink: 0;
+    }
+    .note-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .note-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem; border-bottom: 1px solid #1a4a70;
+    }
+    .note-img-placeholder span {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: #335577;
+    }
+
+    .note-body { padding: 1.75rem; display: flex; flex-direction: column; flex: 1; }
+    .note-tag {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .note-title { font-size: 1.1rem; font-weight: 600; color: #EEF4FA; font-style: italic; margin-bottom: 0.4rem; line-height: 1.4; }
+    .note-sub { font-size: 0.88rem; color: #7AADCC; margin-bottom: 0.3rem; }
+    .note-led { font-family: var(--mono); font-size: 0.6rem; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+    .note-read {
+      display: inline-block; margin-top: auto; padding-top: 1rem;
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent);
+    }
 
     /* CONTACT */
     #contact { background: var(--bg); }
@@ -327,7 +372,7 @@
 <nav>
   <span class="nav-logo">AL</span>
   <a href="#about">About</a>
-  <a href="#research">Research</a>
+  <a href="#research">Projects</a>
   <a href="#teaching">Teaching</a>
   <a href="#cv">CV</a>
   <a href="#blog">Notes</a>
@@ -358,7 +403,7 @@
         <span class="interest-tag">Differential Topology</span>
       </div>
       <div class="hero-links">
-        <a href="#research" class="primary">Research & Projects</a>
+        <a href="#research" class="primary">Projects & Talks</a>
         <a href="#cv">Curriculum Vitae</a>
         <a href="https://github.com/Abderrahmane-Labane" target="_blank">GitHub ↗</a>
       </div>
@@ -378,8 +423,7 @@
 
   <!-- RESEARCH -->
   <section id="research">
-    <div class="section-number">02 — Research & Projects</div>
-    <h2>Research</h2>
+    <div class="section-number" style="margin-bottom:2rem;">02 — Projects & Talks</div>
 
     <div class="section-number" style="margin-bottom:1.5rem;">Projects & Talks</div>
     <ul class="project-list">
@@ -393,6 +437,8 @@
       </li>
       <li class="project-item">
         <span class="project-year">Spring 2025<br>MSU</span>
+        <div>
+          <div class="project-title">Obstruction Theory: The Poincaré–Hopf Theorem</div>
           <div class="project-venue">Final Project · Algebraic Topology · Montana State University</div>
           <div class="project-sup">A study of obstruction theory and its culmination in the Poincaré–Hopf index theorem for vector fields on smooth manifolds.</div>
         </div>
@@ -582,33 +628,74 @@
 
   <!-- BLOG -->
   <section id="blog">
-    <div class="section-number">05 — Blog & Notes</div>
+    <div class="section-number">05 — Notes & Writings</div>
     <h2>Notes</h2>
-    <div class="blog-grid">
-      <a href="#" class="blog-card">
-        <div class="blog-date">Algebraic Topology · Expository</div>
-        <div class="blog-title">Obstruction Theory and the Poincaré–Hopf Theorem</div>
-        <div class="blog-excerpt">How obstruction theory provides a systematic framework for extending sections of fiber bundles, culminating in the beautiful index theorem for vector fields on smooth manifolds.</div>
-        <span class="blog-read-more">Read more →</span>
+    <div class="notes-row">
+
+      <a href="#" class="note-card">
+        <div class="note-img">
+          <!-- Replace with: <img src="notes1.jpg" alt="Study Group Notes"> -->
+          <div class="note-img-placeholder">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="40">
+              <rect x="10" y="8" width="40" height="44" rx="2" stroke="#D4A024" stroke-width="1.5"/>
+              <line x1="18" y1="20" x2="42" y2="20" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="28" x2="42" y2="28" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="36" x2="34" y2="36" stroke="#D4A024" stroke-width="1"/>
+            </svg>
+            <span>Add Cover Image</span>
+          </div>
+        </div>
+        <div class="note-body">
+          <div class="note-tag">Study Group · Ongoing</div>
+          <div class="note-title">Topology and Differential Geometry in Physics</div>
+          <div class="note-sub">Study Group Notes</div>
+          <div class="note-led">Led by Abderrahmane Labane</div>
+          <span class="note-read">View Notes →</span>
+        </div>
       </a>
-      <a href="#" class="blog-card">
-        <div class="blog-date">Mathematical Physics · Expository</div>
-        <div class="blog-title">Supersymmetry Meets Morse Theory</div>
-        <div class="blog-excerpt">An accessible account of the remarkable connection between supersymmetric quantum mechanics and the topological information encoded in Morse functions on smooth manifolds.</div>
-        <span class="blog-read-more">Read more →</span>
+
+      <a href="#" class="note-card">
+        <div class="note-img">
+          <!-- Replace with: <img src="notes2.jpg" alt="BV Formalism"> -->
+          <div class="note-img-placeholder">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="40">
+              <rect x="10" y="8" width="40" height="44" rx="2" stroke="#D4A024" stroke-width="1.5"/>
+              <line x1="18" y1="20" x2="42" y2="20" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="28" x2="42" y2="28" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="36" x2="34" y2="36" stroke="#D4A024" stroke-width="1"/>
+            </svg>
+            <span>Add Cover Image</span>
+          </div>
+        </div>
+        <div class="note-body">
+          <div class="note-tag">QFT · Expository</div>
+          <div class="note-title">BV Formalism: Ghosts Hiding the Indefinite Norm Hilbert Space</div>
+          <div class="note-sub">Research Notes</div>
+          <span class="note-read">View Notes →</span>
+        </div>
       </a>
-      <a href="#" class="blog-card">
-        <div class="blog-date">QFT · Research Notes</div>
-        <div class="blog-title">What Are Factorisation Algebras?</div>
-        <div class="blog-excerpt">A gentle introduction to factorisation algebras as a modern framework for quantum field theory, motivated by the problem of combining local observables coherently.</div>
-        <span class="blog-read-more">Read more →</span>
+
+      <a href="#" class="note-card">
+        <div class="note-img">
+          <!-- Replace with: <img src="notes3.jpg" alt="Geometry and Topology"> -->
+          <div class="note-img-placeholder">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="40">
+              <rect x="10" y="8" width="40" height="44" rx="2" stroke="#D4A024" stroke-width="1.5"/>
+              <line x1="18" y1="20" x2="42" y2="20" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="28" x2="42" y2="28" stroke="#D4A024" stroke-width="1"/>
+              <line x1="18" y1="36" x2="34" y2="36" stroke="#D4A024" stroke-width="1"/>
+            </svg>
+            <span>Add Cover Image</span>
+          </div>
+        </div>
+        <div class="note-body">
+          <div class="note-tag">Expository</div>
+          <div class="note-title">Geometry, Topology and Mathematical Physics — Simplified</div>
+          <div class="note-sub">Expository Notes</div>
+          <span class="note-read">View Notes →</span>
+        </div>
       </a>
-      <a href="#" class="blog-card">
-        <div class="blog-date">Teaching · Calculus</div>
-        <div class="blog-title">Visualising Stokes' Theorem: A Teaching Approach</div>
-        <div class="blog-excerpt">After several semesters of teaching multivariable calculus, here are the intuitions and analogies that genuinely help students grasp the geometry behind Stokes' theorem.</div>
-        <span class="blog-read-more">Read more →</span>
-      </a>
+
     </div>
   </section>
 
