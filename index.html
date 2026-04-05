@@ -8,11 +8,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #F7F5F0;
-      --ink: #0D0D0D;
-      --accent: #C1121F;
-      --muted: #888880;
-      --border: #D8D4C8;
+      --bg: #F7F6F2;
+      --ink: #003057;
+      --accent: #D4A024;
+      --muted: #7A8A99;
+      --border: #C8D0D8;
       --card: #FFFFFF;
       --mono: 'JetBrains Mono', monospace;
       --serif: 'Crimson Pro', Georgia, serif;
@@ -869,7 +869,7 @@
           <ul class="contact-list">
             <li>
               <span class="c-label">Email</span>
-              <span class="c-value"><a href="mailto:yourname@university.edu">yourname@university.edu</a></span>
+              <span class="c-value"><a href="/cdn-cgi/l/email-protection#01786e74736f606c6441746f68776473726875782f646574"><span class="__cf_email__" data-cfemail="c6bfa9b3b4a8a7aba386b3a8afb0a3b4b5afb2bfe8a3a2b3">[email&#160;protected]</span></a></span>
             </li>
             <li>
               <span class="c-label">Office</span>
@@ -909,7 +909,7 @@
     <a href="#about">Back to top ↑</a>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Intersection Observer for scroll-in animations
     const sections = document.querySelectorAll('section');
     const observer = new IntersectionObserver((entries) => {
@@ -926,13 +926,4 @@
       entries.forEach(e => {
         if (e.isIntersecting) {
           navLinks.forEach(a => a.classList.remove('active'));
-          const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-40% 0px -40% 0px' });
-    sectionEls.forEach(s => navObserver.observe(s));
-  </script>
-
-</body>
-</html>
+          const active = documen
