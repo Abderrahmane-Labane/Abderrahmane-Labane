@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Topology & Differential Geometry in Physics — Abderrahmane Labane</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F6F2;
+      --ink: #003057;
+      --accent: #D4A024;
+      --muted: #7A8A99;
+      --border: #C8D0D8;
+      --card: #FFFFFF;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Crimson Pro', Georgia, serif;
+      --display: 'Bebas Neue', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--ink);
+      padding: 1rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-back {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #7A9BBB;
+      transition: color 0.2s;
+    }
+    .topbar-back:hover { color: var(--accent); }
+
+    .topbar-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #335577;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      color: #F7F6F2;
+      padding: 5rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: 'TDG';
+      font-family: var(--display);
+      font-size: 20rem;
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      right: -2rem;
+      bottom: -4rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hero-meta-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #335577;
+    }
+
+    .hero-meta-value {
+      font-size: 1rem;
+      color: #BDD0E0;
+      font-style: italic;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .page-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sec-title {
+      font-family: var(--display);
+      font-size: 2.5rem;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    /* ── DESCRIPTION ── */
+    .description-block {
+      margin-bottom: 5rem;
+    }
+
+    .description-block p {
+      font-size: 1.15rem;
+      font-weight: 300;
+      line-height: 1.95;
+      color: #334455;
+      max-width: 760px;
+    }
+
+    /* ── TOPICS ── */
+    .topics-section { margin-bottom: 5rem; }
+
+    .topic-list { list-style: none; }
+
+    .topic-item {
+      display: grid;
+      grid-template-columns: 50px 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .topic-item:first-child { border-top: 1px solid var(--border); }
+
+    .part-label {
+      font-family: var(--display);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--card);
+      background: var(--ink);
+      padding: 0.5rem 1.5rem;
+      margin-top: 1.5rem;
+      display: block;
+    }
+
+    .topic-num {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .topic-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .topic-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 0.15rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .download-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .download-btn.coming-soon {
+      opacity: 0.4;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* ── PROBLEM SETS ── */
+    .psets-section { margin-bottom: 5rem; }
+
+    .pset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .pset-card {
+      background: var(--card);
+      padding: 1.75rem;
+      position: relative;
+    }
+
+    .pset-number {
+      font-family: var(--display);
+      font-size: 3.5rem;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .pset-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    .pset-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .pset-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .pset-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pset-btn.solution {
+      border-color: transparent;
+      background: #EEF2F7;
+      color: var(--muted);
+    }
+
+    .pset-btn.solution:hover {
+      background: var(--ink);
+      color: var(--accent);
+      border-color: var(--ink);
+    }
+
+    .pset-btn.coming {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .pset-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .pset-dot.posted { background: var(--accent); }
+    .pset-dot.solved { background: #4CAF50; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: #335577;
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+    }
+
+    footer a { color: #335577; text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 700px) {
+      .topbar { padding: 1rem 1.5rem; }
+      .hero { padding: 3rem 1.5rem; }
+      .page-content { padding: 3rem 1.5rem; }
+      .topic-item { grid-template-columns: 40px 1fr; }
+      .download-btn { display: none; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <a href="index.html" class="topbar-back">← Back to Home</a>
+    <span class="topbar-title">Abderrahmane Labane · MSU Mathematics</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Study Group · Notes</div>
+    <h1>Topology and Differential Geometry in Physics</h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Led by</span>
+        <span class="hero-meta-value">Abderrahmane Labane</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Institution</span>
+        <span class="hero-meta-value">Montana State University</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Level</span>
+        <span class="hero-meta-value">Semi-rigorous · Graduate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="page-content">
+
+    <!-- DESCRIPTION -->
+    <div class="description-block">
+      <div class="sec-label">About This Course</div>
+      <div class="sec-title">Overview</div>
+      <p>
+        This course offers a semi-rigorous introduction to the mathematical structures underlying
+        theoretical physics. By semi-rigorous, we mean that all definitions and theorems will be
+        stated with mathematical precision, but not all will be proven in full detail. Instead,
+        the focus will be on developing the mathematical intuition and thinking style necessary
+        for understanding and contributing to modern theoretical physics.
+      </p>
+      <br>
+      <p>
+        We aim to build everything from scratch — no prior background in advanced mathematics
+        or physics is assumed. The only requirement is curiosity and a willingness to learn.
+        Where we skip formal proofs, we'll compensate with rich and illuminating examples drawn
+        from physics and geometry. The ultimate goal is to equip participants with a rigorous
+        mathematical lens and the foundational tools needed to independently approach advanced
+        topics in mathematical physics.
+      </p>
+    </div>
+
+    <!-- TOPICS & NOTES -->
+    <div class="topics-section">
+      <div class="sec-label">Lecture Notes</div>
+      <div class="sec-title">Topics</div>
+      <ul class="topic-list">
+
+        <div class="part-label">Part I — Introduction</div>
+
+        <li class="topic-item">
+          <span class="topic-num">01</span>
+          <div>
+            <div class="topic-name">What is Physics?</div>
+            <div class="topic-sub">The mathematical nature of physical theories</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">02</span>
+          <div>
+            <div class="topic-name">Set Theory</div>
+            <div class="topic-sub">Sets, functions, relations, cardinality</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">03</span>
+          <div>
+            <div class="topic-name">Real Analysis</div>
+            <div class="topic-sub">Sequences, continuity, differentiation, integration</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <div class="part-label">Part II — Topology</div>
+
+        <li class="topic-item">
+          <span class="topic-num">04</span>
+          <div>
+            <div class="topic-name">Topology</div>
+            <div class="topic-sub">Topological spaces, open sets, continuity, compactness, connectedness</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <div class="part-label">Part III — Algebraic Topology</div>
+
+        <li class="topic-item">
+          <span class="topic-num">05</span>
+          <div>
+            <div class="topic-name">Homotopy</div>
+            <div class="topic-sub">Homotopy of maps, fundamental group, higher homotopy groups</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">06</span>
+          <div>
+            <div class="topic-name">Homology</div>
+            <div class="topic-sub">Singular homology, chain complexes, exact sequences</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">07</span>
+          <div>
+            <div class="topic-name">Cohomology</div>
+            <div class="topic-sub">Singular cohomology, cup product, Poincaré duality</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <div class="part-label">Part IV — Smooth Manifolds</div>
+
+        <li class="topic-item">
+          <span class="topic-num">08</span>
+          <div>
+            <div class="topic-name">Smooth Manifolds</div>
+            <div class="topic-sub">Charts, atlases, smooth maps, submanifolds</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">09</span>
+          <div>
+            <div class="topic-name">Tangent Space</div>
+            <div class="topic-sub">Derivations, tangent bundles, vector fields, flows</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">10</span>
+          <div>
+            <div class="topic-name">Cotangent Space</div>
+            <div class="topic-sub">Covectors, differential forms, cotangent bundle</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">11</span>
+          <div>
+            <div class="topic-name">Integration on Manifolds</div>
+            <div class="topic-sub">Orientation, differential forms, Stokes' theorem</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <div class="part-label">Part V — Differential Geometry</div>
+
+        <li class="topic-item">
+          <span class="topic-num">12</span>
+          <div>
+            <div class="topic-name">de Rham Cohomology</div>
+            <div class="topic-sub">Closed and exact forms, de Rham theorem, Mayer–Vietoris</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">13</span>
+          <div>
+            <div class="topic-name">Lie Groups & Algebras</div>
+            <div class="topic-sub">Matrix groups, exponential map, adjoint representation</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">14</span>
+          <div>
+            <div class="topic-name">Fiber & Vector Bundles</div>
+            <div class="topic-sub">Sections, transition functions, associated bundles</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">15</span>
+          <div>
+            <div class="topic-name">Principal Bundles & Connections</div>
+            <div class="topic-sub">Gauge theory, covariant derivative, curvature, holonomy</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">16</span>
+          <div>
+            <div class="topic-name">Riemannian Geometry</div>
+            <div class="topic-sub">Metrics, geodesics, Riemann curvature tensor, general relativity</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">17</span>
+          <div>
+            <div class="topic-name">Symplectic Geometry</div>
+            <div class="topic-sub">Symplectic manifolds, Hamiltonian mechanics, Poisson brackets</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">18</span>
+          <div>
+            <div class="topic-name">Complex Geometry</div>
+            <div class="topic-sub">Complex manifolds, Kähler geometry, holomorphic bundles</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">19</span>
+          <div>
+            <div class="topic-name">Characteristic Classes</div>
+            <div class="topic-sub">Chern classes, Pontryagin classes, Euler class</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">20</span>
+          <div>
+            <div class="topic-name">Index Theory</div>
+            <div class="topic-sub">Atiyah–Singer index theorem, elliptic operators</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">21</span>
+          <div>
+            <div class="topic-name">Chern–Simons Theory</div>
+            <div class="topic-sub">Chern–Simons functional, topological quantum field theory</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+        <li class="topic-item">
+          <span class="topic-num">22</span>
+          <div>
+            <div class="topic-name">Moduli Spaces</div>
+            <div class="topic-sub">Parameter spaces of geometric structures, instantons</div>
+          </div>
+          <a href="#" class="download-btn coming-soon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Coming Soon
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- PROBLEM SETS -->
+    <div class="psets-section">
+      <div class="sec-label">Exercises</div>
+      <div class="sec-title">Problem Sets</div>
+      <div class="pset-grid">
+
+        <div class="pset-card">
+          <div class="pset-number">01</div>
+          <div class="pset-title">Problem Set 1</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">02</div>
+          <div class="pset-title">Problem Set 2</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">03</div>
+          <div class="pset-title">Problem Set 3</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">04</div>
+          <div class="pset-title">Problem Set 4</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">05</div>
+          <div class="pset-title">Problem Set 5</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">06</div>
+          <div class="pset-title">Problem Set 6</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">07</div>
+          <div class="pset-title">Problem Set 7</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">08</div>
+          <div class="pset-title">Problem Set 8</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">09</div>
+          <div class="pset-title">Problem Set 9</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">10</div>
+          <div class="pset-title">Problem Set 10</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">11</div>
+          <div class="pset-title">Problem Set 11</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">12</div>
+          <div class="pset-title">Problem Set 12</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+        <div class="pset-card">
+          <div class="pset-number">13</div>
+          <div class="pset-title">Problem Set 13</div>
+          <div class="pset-actions">
+            <a href="#" class="pset-btn coming"><span class="pset-dot"></span> Problems — Coming Soon</a>
+            <a href="#" class="pset-btn solution coming"><span class="pset-dot"></span> Solutions — Coming Soon</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end page-content -->
+
+  <footer>
+    <span>Topology & Differential Geometry in Physics · <span style="color:var(--accent)">Abderrahmane Labane</span></span>
+    <a href="index.html">← Back to Home</a>
+  </footer>
+
+</body>
+</html>
