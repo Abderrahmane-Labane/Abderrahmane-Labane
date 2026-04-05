@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name | Mathematics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F5F0;
+      --ink: #0D0D0D;
+      --accent: #C1121F;
+      --muted: #888880;
+      --border: #D8D4C8;
+      --card: #FFFFFF;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Crimson Pro', Georgia, serif;
+      --display: 'Bebas Neue', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── SIDEBAR NAV ── */
+    nav {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 72px;
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      z-index: 100;
+      padding: 2rem 0;
+    }
+
+    nav a {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: #888;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active { color: var(--accent); }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      margin-bottom: 1rem;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      margin-left: 72px;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 5rem 6rem 5rem 5rem;
+      position: relative;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-number {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      margin-bottom: 3rem;
+    }
+
+    /* ── HERO ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 4rem;
+      align-items: center;
+      background: var(--ink);
+      color: #F7F5F0;
+      min-height: 100vh;
+      border-top: none;
+    }
+
+    .hero-content { position: relative; }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-size: 1.25rem;
+      font-weight: 300;
+      font-style: italic;
+      color: #AAA;
+      margin-bottom: 1rem;
+    }
+
+    .hero-bio {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: #CCC;
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .hero-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid #444;
+      color: #CCC;
+      transition: all 0.2s;
+    }
+
+    .hero-links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-links a.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .hero-links a.primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    /* ── PHOTO CARD ── */
+    .photo-panel {
+      position: relative;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-frame svg {
+      width: 60%;
+      opacity: 0.15;
+    }
+
+    .photo-label {
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      background: var(--accent);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      color: #fff;
+    }
+
+    .math-decoration {
+      position: absolute;
+      top: -1.5rem;
+      right: -1.5rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: #333;
+      writing-mode: vertical-rl;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── RESEARCH ── */
+    #research { background: var(--bg); }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: var(--border);
+      margin-bottom: 4rem;
+    }
+
+    .research-card {
+      background: var(--card);
+      padding: 2.5rem;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .research-card:hover { transform: translateY(-4px); }
+
+    .research-card::before {
+      content: attr(data-index);
+      font-family: var(--display);
+      font-size: 5rem;
+      color: var(--border);
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      line-height: 1;
+    }
+
+    .research-card h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    .research-card p {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 300;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── PUBLICATIONS ── */
+    .pub-list { list-style: none; }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pub-year {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 300;
+      padding-top: 0.2rem;
+    }
+
+    .pub-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-style: italic;
+      margin-bottom: 0.3rem;
+    }
+
+    .pub-journal {
+      font-size: 0.95rem;
+      color: #555;
+      font-weight: 300;
+    }
+
+    .pub-links { margin-top: 0.5rem; }
+
+    .pub-links a {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--accent);
+      margin-right: 1.25rem;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .pub-links a:hover { border-color: var(--accent); }
+
+    /* ── TEACHING ── */
+    #teaching { background: #F0EDE6; }
+
+    .teaching-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .course-card {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      background: var(--card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .course-card:hover::after { transform: scaleX(1); }
+
+    .course-code {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .course-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-meta {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    /* ── CV ── */
+    #cv { background: var(--bg); }
+
+    .cv-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 4rem;
+    }
+
+    .cv-section { margin-bottom: 3rem; }
+
+    .cv-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 0.3rem;
+      border-top: 2px solid var(--ink);
+    }
+
+    .cv-entry { margin-bottom: 2rem; }
+
+    .cv-entry-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .cv-entry-subtitle {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 0.25rem;
+    }
+
+    .cv-entry-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .cv-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      transition: all 0.2s;
+    }
+
+    .cv-download:hover {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    /* ── BLOG ── */
+    #blog { background: var(--ink); color: #F7F5F0; }
+    #blog h2 { color: #F7F5F0; }
+    #blog .section-number { color: #555; }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: #222;
+    }
+
+    .blog-card {
+      background: #111;
+      padding: 2.5rem;
+      text-decoration: none;
+      color: #CCC;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .blog-card:hover { background: #161616; }
+
+    .blog-date {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .blog-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #F7F5F0;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+
+    .blog-excerpt {
+      font-size: 0.95rem;
+      color: #777;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .blog-read-more {
+      display: inline-block;
+      margin-top: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--bg); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-intro {
+      font-size: 1.35rem;
+      font-weight: 300;
+      font-style: italic;
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    .contact-list { list-style: none; }
+
+    .contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-list .c-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 80px;
+      padding-top: 0.15rem;
+    }
+
+    .contact-list .c-value {
+      font-size: 1.05rem;
+    }
+
+    .contact-list a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+
+    .contact-list a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Big math symbol decoration */
+    .math-bg {
+      font-family: var(--display);
+      font-size: 18rem;
+      color: var(--border);
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-left: 72px;
+      background: var(--ink);
+      color: #555;
+      padding: 2rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    footer a { color: #555; text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { display: none; }
+      main, footer { margin-left: 0; }
+      section { padding: 4rem 2rem; }
+      #about { grid-template-columns: 1fr; }
+      .photo-panel { display: none; }
+      .research-grid, .teaching-grid, .blog-grid, .contact-layout { grid-template-columns: 1fr; }
+      .cv-grid { grid-template-columns: 1fr; }
+      .cv-label { border-top: none; border-left: 2px solid var(--ink); padding: 0 0 0 1rem; margin-bottom: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR NAV -->
+  <nav>
+    <span class="nav-logo">YN</span>
+    <a href="#about">About</a>
+    <a href="#research">Research</a>
+    <a href="#teaching">Teaching</a>
+    <a href="#cv">CV</a>
+    <a href="#blog">Notes</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+
+    <!-- ── 01 ABOUT ── -->
+    <section id="about">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Graduate Researcher · Mathematics</p>
+        <h1 class="hero-name">Your<br>Name</h1>
+        <p class="hero-title">Ph.D. Candidate, Department of Mathematics · Your University</p>
+        <p class="hero-bio">
+          I work at the intersection of <em>algebraic topology</em> and <em>geometric analysis</em>, 
+          with a particular focus on spectral sequences and their applications to 
+          smooth manifolds. My research is advised by Prof. Advisor Name.
+        </p>
+        <div class="hero-links">
+          <a href="#research" class="primary">View Research</a>
+          <a href="#contact">Get in Touch</a>
+          <a href="https://github.com/yourusername" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+
+      <div class="photo-panel">
+        <div class="photo-frame">
+          <!-- Replace this SVG with: <img src="photo.jpg" alt="Your Name" style="width:100%;height:100%;object-fit:cover;"> -->
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="35" r="18" fill="none" stroke="#555" stroke-width="1"/>
+            <path d="M 20 80 Q 50 55 80 80" fill="none" stroke="#555" stroke-width="1"/>
+          </svg>
+          <div class="photo-label">Your Photo Here</div>
+        </div>
+        <div class="math-decoration">∀ε&gt;0 ∃δ&gt;0 · lim_{n→∞} · ∫∂M ω = ∫M dω</div>
+      </div>
+    </section>
+
+    <!-- ── 02 RESEARCH ── -->
+    <section id="research">
+      <div class="section-number">02 — Research</div>
+      <h2>Research</h2>
+
+      <div class="research-grid">
+        <div class="research-card" data-index="01">
+          <span class="tag">Primary</span>
+          <h3>Algebraic Topology</h3>
+          <p>Spectral sequences, cohomology operations, and their applications to smooth manifolds and fiber bundles.</p>
+        </div>
+        <div class="research-card" data-index="02">
+          <span class="tag">Secondary</span>
+          <h3>Geometric Analysis</h3>
+          <p>Elliptic PDE on Riemannian manifolds, index theory, and heat kernel methods in global analysis.</p>
+        </div>
+        <div class="research-card" data-index="03">
+          <span class="tag">Collaboration</span>
+          <h3>Mathematical Physics</h3>
+          <p>Applications of topology to quantum field theory, topological invariants in condensed matter systems.</p>
+        </div>
+        <div class="research-card" data-index="04">
+          <span class="tag">Emerging</span>
+          <h3>Computational Methods</h3>
+          <p>Algorithmic approaches to computing persistent homology and topological data analysis.</p>
+        </div>
+      </div>
+
+      <div class="section-number" style="margin-bottom:1.5rem;">Publications & Preprints</div>
+      <ul class="pub-list">
+        <li class="pub-item">
+          <span class="pub-year">2024</span>
+          <div>
+            <div class="pub-title">On the Convergence of Serre Spectral Sequences for Fibrations with Singular Fibers</div>
+            <div class="pub-journal">Journal of Topology, vol. 17, pp. 482–510</div>
+            <div class="pub-links">
+              <a href="#">arXiv ↗</a>
+              <a href="#">PDF ↗</a>
+              <a href="#">Abstract</a>
+            </div>
+          </div>
+        </li>
+        <li class="pub-item">
+          <span class="pub-year">2023</span>
+          <div>
+            <div class="pub-title">Characteristic Classes of Flat Bundles and Secondary Invariants</div>
+            <div class="pub-journal">Preprint — arXiv:2312.00000</div>
+            <div class="pub-links">
+              <a href="#">arXiv ↗</a>
+              <a href="#">PDF ↗</a>
+            </div>
+          </div>
+        </li>
+        <li class="pub-item">
+          <span class="pub-year">2022</span>
+          <div>
+            <div class="pub-title">A Note on the Atiyah–Singer Index Theorem for Manifolds with Boundary</div>
+            <div class="pub-journal">Proceedings of the AMS, vol. 150, pp. 3011–3024</div>
+            <div class="pub-links">
+              <a href="#">arXiv ↗</a>
+              <a href="#">PDF ↗</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── 03 TEACHING ── -->
+    <section id="teaching">
+      <div class="section-number">03 — Teaching</div>
+      <h2>Teaching</h2>
+
+      <div class="teaching-grid">
+        <div class="course-card">
+          <div class="course-code">MATH 401 · Fall 2024</div>
+          <div class="course-name">Real Analysis I</div>
+          <div style="font-size:0.95rem;color:#555;margin:0.5rem 0 1rem;">Teaching Assistant</div>
+          <div class="course-meta">Office Hours · Mon & Wed, 3–5 PM · Room 214</div>
+        </div>
+        <div class="course-card">
+          <div class="course-code">MATH 231 · Spring 2024</div>
+          <div class="course-name">Multivariable Calculus</div>
+          <div style="font-size:0.95rem;color:#555;margin:0.5rem 0 1rem;">Instructor of Record</div>
+          <div class="course-meta">Lecture · MWF 10–11 AM · Room 101</div>
+        </div>
+        <div class="course-card">
+          <div class="course-code">MATH 302 · Fall 2023</div>
+          <div class="course-name">Linear Algebra</div>
+          <div style="font-size:0.95rem;color:#555;margin:0.5rem 0 1rem;">Teaching Assistant</div>
+          <div class="course-meta">Discussion Sections · Tue & Thu</div>
+        </div>
+      </div>
+
+      <div class="section-number" style="margin-bottom:1rem;">Teaching Philosophy</div>
+      <p style="max-width:680px;font-weight:300;font-style:italic;font-size:1.2rem;color:#444;line-height:1.9;">
+        "I believe mathematics is best learned through struggle and discovery. My goal is to 
+        foster environments where students feel safe to make mistakes, ask questions, and 
+        develop genuine mathematical intuition alongside technical skill."
+      </p>
+    </section>
+
+    <!-- ── 04 CV ── -->
+    <section id="cv">
+      <div class="section-number">04 — Curriculum Vitae</div>
+      <h2>CV</h2>
+
+      <div class="cv-grid">
+
+        <div class="cv-label">Education</div>
+        <div class="cv-section">
+          <div class="cv-entry">
+            <div class="cv-entry-title">Ph.D. in Mathematics</div>
+            <div class="cv-entry-subtitle">Your University · Advisor: Prof. Name</div>
+            <div class="cv-entry-date">2021 — Present</div>
+          </div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">B.S. in Mathematics (Honors)</div>
+            <div class="cv-entry-subtitle">Undergraduate University</div>
+            <div class="cv-entry-date">2017 — 2021</div>
+          </div>
+        </div>
+
+        <div class="cv-label">Awards &amp; Grants</div>
+        <div class="cv-section">
+          <div class="cv-entry">
+            <div class="cv-entry-title">NSF Graduate Research Fellowship</div>
+            <div class="cv-entry-subtitle">National Science Foundation</div>
+            <div class="cv-entry-date">2022 — 2025</div>
+          </div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">Graduate Excellence Award</div>
+            <div class="cv-entry-subtitle">Department of Mathematics</div>
+            <div class="cv-entry-date">2023</div>
+          </div>
+        </div>
+
+        <div class="cv-label">Talks &amp; Conferences</div>
+        <div class="cv-section">
+          <div class="cv-entry">
+            <div class="cv-entry-title">AMS Sectional Meeting</div>
+            <div class="cv-entry-subtitle">Contributed Talk · "Spectral Sequences in Geometry"</div>
+            <div class="cv-entry-date">Oct 2024</div>
+          </div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">Graduate Student Topology Conference</div>
+            <div class="cv-entry-subtitle">Invited Talk</div>
+            <div class="cv-entry-date">Apr 2023</div>
+          </div>
+        </div>
+
+      </div>
+
+      <a href="cv.pdf" class="cv-download">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Full CV (PDF)
+      </a>
+    </section>
+
+    <!-- ── 05 BLOG / NOTES ── -->
+    <section id="blog">
+      <div class="section-number">05 — Blog & Notes</div>
+      <h2>Notes</h2>
+      <div class="blog-grid">
+        <a href="#" class="blog-card">
+          <div class="blog-date">March 2025 · Expository</div>
+          <div class="blog-title">A Gentle Introduction to Spectral Sequences</div>
+          <div class="blog-excerpt">Starting from the basics of filtered complexes and working up to the Serre spectral sequence with concrete examples from algebraic topology.</div>
+          <span class="blog-read-more">Read more →</span>
+        </a>
+        <a href="#" class="blog-card">
+          <div class="blog-date">January 2025 · Research Notes</div>
+          <div class="blog-title">Why the Atiyah–Singer Theorem Is So Unreasonably Effective</div>
+          <div class="blog-excerpt">Exploring the deep connections between analysis, geometry, and topology through one of the 20th century's most beautiful results.</div>
+          <span class="blog-read-more">Read more →</span>
+        </a>
+        <a href="#" class="blog-card">
+          <div class="blog-date">November 2024 · Teaching</div>
+          <div class="blog-title">Common Mistakes in Real Analysis (And How to Fix Them)</div>
+          <div class="blog-excerpt">After four semesters of teaching analysis, I've compiled the most frequent conceptual errors and how to address them with students.</div>
+          <span class="blog-read-more">Read more →</span>
+        </a>
+        <a href="#" class="blog-card">
+          <div class="blog-date">September 2024 · Tools</div>
+          <div class="blog-title">My LaTeX Workflow for Mathematical Writing</div>
+          <div class="blog-excerpt">A practical guide to writing clean, readable mathematical papers: macro libraries, theorem environments, diagram packages, and more.</div>
+          <span class="blog-read-more">Read more →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── 06 CONTACT ── -->
+    <section id="contact" style="position:relative;overflow:hidden;">
+      <div class="math-bg">∞</div>
+      <div class="section-number">06 — Contact</div>
+      <h2>Contact</h2>
+      <div class="contact-layout">
+        <div>
+          <p class="contact-intro">
+            I'm always happy to talk mathematics, discuss potential collaborations, 
+            or answer questions from students. Don't hesitate to reach out.
+          </p>
+          <ul class="contact-list">
+            <li>
+              <span class="c-label">Email</span>
+              <span class="c-value"><a href="mailto:yourname@university.edu">yourname@university.edu</a></span>
+            </li>
+            <li>
+              <span class="c-label">Office</span>
+              <span class="c-value">Mathematics Building, Room 214<br>Your University</span>
+            </li>
+            <li>
+              <span class="c-label">Office Hours</span>
+              <span class="c-value">Monday & Wednesday, 3–5 PM<br>or by appointment</span>
+            </li>
+            <li>
+              <span class="c-label">GitHub</span>
+              <span class="c-value"><a href="https://github.com/yourusername" target="_blank">github.com/yourusername ↗</a></span>
+            </li>
+            <li>
+              <span class="c-label">arXiv</span>
+              <span class="c-value"><a href="https://arxiv.org/search/?query=your+name" target="_blank">arxiv.org ↗</a></span>
+            </li>
+          </ul>
+        </div>
+        <div style="padding-top:2rem;">
+          <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Also find me on</div>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <a href="#" style="font-size:1.05rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">MathSciNet Profile ↗</a>
+            <a href="#" style="font-size:1.05rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">Google Scholar ↗</a>
+            <a href="#" style="font-size:1.05rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">ORCID ↗</a>
+            <a href="#" style="font-size:1.05rem;color:var(--ink);text-decoration:none;">LinkedIn ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© 2025 Your Name · Mathematics</span>
+    <span>Built with GitHub Pages · Last updated April 2025</span>
+    <a href="#about">Back to top ↑</a>
+  </footer>
+
+  <script>
+    // Intersection Observer for scroll-in animations
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(s => observer.observe(s));
+
+    // Active nav link highlighting
+    const navLinks = document.querySelectorAll('nav a');
+    const sectionEls = document.querySelectorAll('section[id]');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    sectionEls.forEach(s => navObserver.observe(s));
+  </script>
+
+</body>
+</html>
