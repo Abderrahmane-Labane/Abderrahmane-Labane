@@ -577,6 +577,19 @@ function closestTarget(side) {
     .sort((left, right) => left.missing + left.theoremBias - (right.missing + right.theoremBias))[0].card;
 }
 
+function closestPlayableTheorem(game) {
+  const cpu = game.cpu;
+  if (cpu.pending.length >= CARD_LIMITS.pendingSlots) return null;
+  return cpu.hand
+    .filter((card) => card.type === "Theorem" && canPlayCard(game, "cpu", card))
+    .map((card) => ({
+      card,
+      missing: missingRequirements(cpu, card).length,
+      difficulty: card.difficulty ?? 0,
+    }))
+    .sort((left, right) => left.missing - right.missing || left.difficulty - right.difficulty)[0]?.card || null;
+}
+
 function playableByType(game, sideName, types) {
   const side = game[sideName];
   return side.hand.find((card) => types.has(card.type) && canPlayCard(game, sideName, card));
@@ -603,6 +616,9 @@ function cpuMainAction(game) {
   const target = closestTarget(cpu);
   const helpful = helpfulCardForTarget(cpu, target);
   if (helpful && canPlayCard(game, "cpu", helpful)) return helpful;
+
+  const theoremAttempt = closestPlayableTheorem(game);
+  if (theoremAttempt) return theoremAttempt;
 
   return playableByType(game, "cpu", SUPPORT_TYPES);
 }

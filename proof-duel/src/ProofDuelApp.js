@@ -1,4 +1,4 @@
-import { DECKS, DECK_IDENTITY, HARD_COUNTER, TYPE_STYLE, getMainDeck, getTheoremDeck } from "./gameData.js";
+import { CARD_TYPES, DECKS, DECK_IDENTITY, HARD_COUNTER, TYPE_STYLE, getMainDeck, getTheoremDeck } from "./gameData.js";
 import {
   advanceToCounterPhase,
   buildProofGraph,
@@ -177,6 +177,13 @@ function campaignBossTheorem(deck) {
 
 function allDeckCards(deck) {
   return [...getMainDeck(deck), ...getTheoremDeck(deck)];
+}
+
+function groupCardsByType(cards) {
+  return CARD_TYPES.map((type) => ({
+    type,
+    cards: cards.filter((card) => card.type === type),
+  })).filter((group) => group.cards.length);
 }
 
 function findProducers(deck, fact) {
@@ -1034,7 +1041,124 @@ export function createProofDuelApp({ React, motion }) {
     );
   }
 
-  function StartScreen({ selectedDeck, setSelectedDeck, onStart, onExplain, onGuide, onCampaign, onNotebook, onTutorial }) {
+  function DeckViewerModal({ selectedDeck, setSelectedDeck, onClose }) {
+    const [viewerDeck, setViewerDeck] = React.useState(selectedDeck);
+    const mainDeck = getMainDeck(viewerDeck);
+    const theoremDeck = getTheoremDeck(viewerDeck);
+    const deckStats = {
+      main: mainDeck.length,
+      theorem: theoremDeck.length,
+      facts: new Set(allDeckCards(viewerDeck).flatMap((card) => card.produces || [])).size,
+      counters: mainDeck.filter((card) => ["Counterexample", "Pathology", "Generalization"].includes(card.type)).length,
+    };
+    const renderMiniCard = (card) => {
+      const style = TYPE_STYLE[card.type] || TYPE_STYLE.Definition;
+      return h(
+        "article",
+        { key: card.id, className: cx("deck-view-card", `tone-${style.tone}`) },
+        h(
+          "div",
+          { className: "deck-view-card-top" },
+          h("span", { className: "deck-view-type" }, card.type),
+          h("span", { className: "deck-view-cost" }, `D${card.difficulty ?? 0}`)
+        ),
+        h("h4", null, card.name),
+        h("p", null, card.description),
+        card.requirements?.length
+          ? h("div", { className: "deck-view-chips missing" }, h("strong", null, "Needs"), card.requirements.slice(0, 5).map((item) => h("span", { key: item }, item)))
+          : null,
+        card.produces?.length
+          ? h("div", { className: "deck-view-chips" }, h("strong", null, "Makes"), card.produces.slice(0, 5).map((item) => h("span", { key: item }, item)))
+          : null,
+        card.counters?.length
+          ? h("div", { className: "deck-view-chips counter" }, h("strong", null, "Counters"), card.counters.slice(0, 4).map((item) => h("span", { key: item }, item)))
+          : null,
+        card.type === "Theorem"
+          ? h("p", { className: "deck-view-guide" }, getTheoremGuide(card.name)?.summary || "Signature theorem target.")
+          : null
+      );
+    };
+    const renderGroups = (cards) =>
+      groupCardsByType(cards).map((group) =>
+        h(
+          "section",
+          { key: group.type, className: "deck-view-group" },
+          h(
+            "div",
+            { className: "deck-view-group-heading" },
+            h("h3", null, group.type),
+            h("span", null, group.cards.length)
+          ),
+          h("div", { className: "deck-view-cards" }, group.cards.map(renderMiniCard))
+        )
+      );
+
+    return h(
+      "div",
+      { className: "modal-shell", role: "dialog", "aria-modal": "true" },
+      h("div", { className: "modal-backdrop", onClick: onClose }),
+      m(
+        "div",
+        { className: "deck-viewer-modal", initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.22 } },
+        h(
+          "div",
+          { className: "modal-header" },
+          h("div", null, h("h2", null, "Deck Viewer"), h("p", null, "Preview every card before choosing your proof strategy.")),
+          h("button", { type: "button", onClick: onClose }, "x")
+        ),
+        h(
+          "div",
+          { className: "deck-viewer-tabs" },
+          DECKS.map((deck) =>
+            h(
+              "button",
+              {
+                key: deck,
+                type: "button",
+                className: cx(viewerDeck === deck && "active"),
+                onClick: () => {
+                  setViewerDeck(deck);
+                  setSelectedDeck(deck);
+                },
+              },
+              h("span", null, DECK_IDENTITY[deck].icon),
+              deck
+            )
+          )
+        ),
+        h(
+          "div",
+          { className: "deck-viewer-overview" },
+          h("div", null, h("strong", null, viewerDeck), h("p", null, DECK_IDENTITY[viewerDeck].identity)),
+          h("div", { className: "deck-viewer-stats" },
+            h("span", null, h("b", null, deckStats.main), " Main"),
+            h("span", null, h("b", null, deckStats.theorem), " Theorems"),
+            h("span", null, h("b", null, deckStats.facts), " Facts"),
+            h("span", null, h("b", null, deckStats.counters), " Disruptors")
+          ),
+          h("p", { className: "deck-viewer-rival" }, `Hard counter rival: ${HARD_COUNTER[viewerDeck]}`)
+        ),
+        h(
+          "div",
+          { className: "deck-viewer-lists" },
+          h(
+            "section",
+            { className: "deck-viewer-column" },
+            h("header", null, h("h3", null, "Main Deck"), h("span", null, `${mainDeck.length} cards`)),
+            renderGroups(mainDeck)
+          ),
+          h(
+            "section",
+            { className: "deck-viewer-column theorem-column" },
+            h("header", null, h("h3", null, "Theorem Deck"), h("span", null, `${theoremDeck.length} cards`)),
+            renderGroups(theoremDeck)
+          )
+        )
+      )
+    );
+  }
+
+  function StartScreen({ selectedDeck, setSelectedDeck, onStart, onExplain, onGuide, onCampaign, onNotebook, onTutorial, onDeckViewer }) {
     return h(
       "main",
       { className: "start-screen" },
@@ -1069,6 +1193,7 @@ export function createProofDuelApp({ React, motion }) {
           h("button", { type: "button", className: "primary-action ready campaign-button", onClick: onCampaign }, "Start Campaign"),
           h("button", { type: "button", className: "primary-action ready", onClick: onTutorial }, "Tutorial Duel"),
           h("button", { type: "button", className: "secondary-action", onClick: onStart }, "Quick Duel"),
+          h("button", { type: "button", className: "secondary-action", onClick: onDeckViewer }, "Deck Viewer"),
           h("button", { type: "button", className: "secondary-action", onClick: onGuide }, "Theorem Proof Guide"),
           h("button", { type: "button", className: "secondary-action", onClick: onNotebook }, "Research Notebook"),
           h("button", { type: "button", className: "secondary-action", onClick: onExplain }, "Explain Game")
@@ -1268,6 +1393,7 @@ export function createProofDuelApp({ React, motion }) {
     const [showExplain, setShowExplain] = React.useState(false);
     const [showGuide, setShowGuide] = React.useState(false);
     const [showNotebook, setShowNotebook] = React.useState(false);
+    const [showDeckViewer, setShowDeckViewer] = React.useState(false);
     const [tutorial, setTutorial] = React.useState({ active: false });
     const [campaign, setCampaign] = React.useState({
       active: false,
@@ -1334,6 +1460,7 @@ export function createProofDuelApp({ React, motion }) {
             },
             onExplain: () => setShowExplain(true),
             onGuide: () => setShowGuide(true),
+            onDeckViewer: () => setShowDeckViewer(true),
             onCampaign: () => {
               setCampaign((current) => ({
                 ...current,
@@ -1381,7 +1508,8 @@ export function createProofDuelApp({ React, motion }) {
         : null,
       showExplain ? h(ExplainModal, { onClose: () => setShowExplain(false) }) : null,
       showGuide ? h(ProofGuideModal, { onClose: () => setShowGuide(false) }) : null,
-      showNotebook ? h(ResearchNotebookModal, { campaign, selectedDeck, onClose: () => setShowNotebook(false) }) : null
+      showNotebook ? h(ResearchNotebookModal, { campaign, selectedDeck, onClose: () => setShowNotebook(false) }) : null,
+      showDeckViewer ? h(DeckViewerModal, { selectedDeck, setSelectedDeck, onClose: () => setShowDeckViewer(false) }) : null
     );
   };
 }
