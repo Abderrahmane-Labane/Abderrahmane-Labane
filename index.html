@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abderrahmane Labane | Mathematics — MSU</title>
+  <title>Abderrahmane Labane | Mathematics - MSU</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -333,6 +333,116 @@
       letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent);
     }
 
+    /* INTERACTIVE MATHEMATICS */
+    #interactive {
+      background: #07101A;
+      color: #F7F6F2;
+      min-height: auto;
+    }
+
+    #interactive h2 {
+      color: #F7F6F2;
+    }
+
+    #interactive .section-number {
+      color: #335577;
+    }
+
+    .interactive-showcase {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.5px;
+      background: #1a4a70;
+    }
+
+    .interactive-copy {
+      background: #012244;
+      padding: 2.5rem;
+    }
+
+    .interactive-copy p {
+      color: #BDD0E0;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+    }
+
+    .interactive-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .interactive-tags span {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid #335577;
+      color: #9BB8D4;
+      padding: 0.35rem 0.7rem;
+    }
+
+    .interactive-launch {
+      display: inline-flex;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #07101A;
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 1rem 1.6rem;
+      transition: all 0.2s;
+    }
+
+    .interactive-launch:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .interactive-preview {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(212, 160, 36, 0.24), transparent 35%),
+        linear-gradient(135deg, #101827, #02040A);
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .interactive-preview::before {
+      content: "∀x∈X ∃ proof";
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: #335577;
+      text-transform: uppercase;
+    }
+
+    .interactive-preview-title {
+      font-family: var(--display);
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      line-height: 0.9;
+      color: var(--accent);
+    }
+
+    .interactive-preview-sub {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #7AADCC;
+      margin-top: 1rem;
+    }
+
     /* CONTACT */
     #contact { background: var(--bg); }
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
@@ -360,7 +470,7 @@
       section { padding: 4rem 2rem; }
       #about { grid-template-columns: 1fr; }
       .photo-panel { display: none; }
-      .research-grid, .teaching-grid, .blog-grid, .contact-layout { grid-template-columns: 1fr; }
+      .research-grid, .teaching-grid, .blog-grid, .notes-row, .contact-layout, .interactive-showcase { grid-template-columns: 1fr; }
       .cv-grid { grid-template-columns: 1fr; }
       .cv-label { border-top: none; border-left: 3px solid var(--ink); padding: 0 0 0 1rem; margin-bottom: 1rem; }
       .project-item { grid-template-columns: 1fr; gap: 0.5rem; }
@@ -376,6 +486,7 @@
   <a href="#teaching">Teaching</a>
   <a href="#cv">CV</a>
   <a href="#blog">Notes</a>
+  <a href="#interactive">Interactive</a>
   <a href="#contact">Contact</a>
 </nav>
 
@@ -405,7 +516,8 @@
       <div class="hero-links">
         <a href="#research" class="primary">Projects & Talks</a>
         <a href="#cv">Curriculum Vitae</a>
-        <a href="https://github.com/Abderrahmane-Labane" target="_blank">GitHub ↗</a>
+        <a href="./proof-duel/">Proof Duel ↗</a>
+        <a href="https://github.com/Abderrahmane-Labane" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
     <div class="photo-panel">
@@ -524,7 +636,7 @@
     <div class="section-number" style="margin-bottom:1rem;">Teaching Philosophy</div>
     <p style="max-width:680px;font-weight:300;font-style:italic;font-size:1.2rem;color:#445566;line-height:1.9;">
       "Mathematics and physics are best learned by confronting hard problems with curiosity
-      and persistence. I aim to build genuine understanding — not just technique —
+      and persistence. I aim to build genuine understanding - not just technique -
       and to make students feel that the hardest ideas are always within reach."
     </p>
   </section>
@@ -613,7 +725,6 @@
         </div>
       </div>
 
-
     </div>
     <a href="CV.pdf" class="cv-download">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -667,10 +778,45 @@
     </div>
   </section>
 
+  <!-- INTERACTIVE MATHEMATICS -->
+  <section id="interactive">
+    <div class="section-number">06 — Interactive Mathematics</div>
+    <h2>Interactive Mathematics</h2>
+
+    <div class="interactive-showcase">
+      <div class="interactive-copy">
+        <p>
+          Proof Duel is a competitive pure-math card game prototype about proving theorems,
+          defending assumptions, and attacking fragile proof chains with counterexamples.
+        </p>
+        <p>
+          It turns mathematical reasoning into a strategic duel: definitions build facts,
+          examples protect arguments, lemmas support larger results, and theorem cards win the game.
+        </p>
+
+        <div class="interactive-tags">
+          <span>Topology</span>
+          <span>Real Analysis</span>
+          <span>Algebra</span>
+          <span>Linear Algebra</span>
+          <span>Counterexamples</span>
+          <span>Proof Strategy</span>
+        </div>
+
+        <a href="./proof-duel/" class="interactive-launch">Play Proof Duel ↗</a>
+      </div>
+
+      <div class="interactive-preview">
+        <div class="interactive-preview-title">PROOF<br>DUEL</div>
+        <div class="interactive-preview-sub">A theorem-proving card battler</div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact" style="position:relative;overflow:hidden;">
     <div class="math-bg">∂</div>
-    <div class="section-number">06 — Contact</div>
+    <div class="section-number">07 — Contact</div>
     <h2>Contact</h2>
     <div class="contact-layout">
       <div>
@@ -689,7 +835,7 @@
           </li>
           <li>
             <span class="c-label">GitHub</span>
-            <span class="c-value"><a href="https://github.com/Abderrahmane-Labane" target="_blank">github.com/Abderrahmane-Labane ↗</a></span>
+            <span class="c-value"><a href="https://github.com/Abderrahmane-Labane" target="_blank" rel="noopener">github.com/Abderrahmane-Labane ↗</a></span>
           </li>
         </ul>
       </div>
@@ -699,7 +845,7 @@
           <a href="#" style="font-size:1rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">Google Scholar ↗</a>
           <a href="#" style="font-size:1rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">arXiv ↗</a>
           <a href="#" style="font-size:1rem;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1rem;">ORCID ↗</a>
-          <a href="https://www.montana.edu/math/" target="_blank" style="font-size:1rem;color:var(--ink);text-decoration:none;">MSU Mathematics Department ↗</a>
+          <a href="https://www.montana.edu/math/" target="_blank" rel="noopener" style="font-size:1rem;color:var(--ink);text-decoration:none;">MSU Mathematics Department ↗</a>
         </div>
       </div>
     </div>
@@ -713,8 +859,39 @@
   <a href="#about">Back to top ↑</a>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
   const sections = document.querySelectorAll('section');
-  sections.forEach(s => s.classList.add('animate-ready'));
+  const navLinks = document.querySelectorAll('nav a');
+
+  sections.forEach((section) => section.classList.add('animate-ready'));
+
   const observer = new IntersectionObserver((entries) => {
-    ent
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  sections.forEach((section) => observer.observe(section));
+
+  const updateActiveNav = () => {
+    let activeId = sections[0]?.id;
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.35) {
+        activeId = section.id;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+    });
+  };
+
+  updateActiveNav();
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+</script>
+</body>
+</html>
